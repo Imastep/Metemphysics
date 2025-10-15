@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Metemphysics Full Equation Interface</title>
+<style>
+    body {
+        background-color: black;
+        color: orange;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    input {
+        width: 150px;
+        padding: 5px;
+        margin: 5px;
+        font-size: 16px;
+        text-align: center;
+    }
+    button {
+        padding: 8px 15px;
+        margin: 5px;
+        font-size: 16px;
+        background-color: orange;
+        color: black;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        opacity: 0.8;
+    }
+    .output {
+        margin-top: 20px;
+        font-size: 18px;
+        white-space: pre-line;
+    }
+</style>
+</head>
+<body>
+
+<h2>Metemphysics Full Equation Interface</h2>
+
+<div>
+    <label>Time (T s):</label>
+    <input type="number" id="T_input" step="any" value="0"><br>
+    <label>Entropy (S J/s):</label>
+    <input type="number" id="S_input" step="any" value="0"><br>
+    <label>ΔT (s):</label>
+    <input type="number" id="deltaT_input" step="any" value="0"><br><br>
+
+    <button onclick="compute_S()">Compute S = C / T</button>
+    <button onclick="compute_T()">Compute T = C / S</button>
+    <button onclick="compute_future_past()">Compute Future & Past</button>
+</div>
+
+<div class="output" id="output"></div>
+
+<script>
+// Speed of light constant
+const C = 299792458;
+
+// --- Functions ---
+function compute_S() {
+    let T = parseFloat(document.getElementById('T_input').value);
+    let output = document.getElementById('output');
+    if (T === 0) {
+        output.textContent = "Enter a non-zero T to compute S = C / T";
+        return;
+    }
+    let S = C / T;
+    output.textContent = `S = C / T = ${S} J/s`;
+}
+
+function compute_T() {
+    let S = parseFloat(document.getElementById('S_input').value);
+    let output = document.getElementById('output');
+    if (S === 0) {
+        output.textContent = "Enter a non-zero S to compute T = C / S";
+        return;
+    }
+    let T = C / S;
+    output.textContent = `T = C / S = ${T} s`;
+}
+
+function compute_future_past() {
+    let T = parseFloat(document.getElementById('T_input').value);
+    let deltaT = parseFloat(document.getElementById('deltaT_input').value);
+    let output = document.getElementById('output');
+    if (T === 0 || deltaT === 0) {
+        output.textContent = "Enter non-zero T and ΔT to compute future/past values";
+        return;
+    }
+    let Tf = T + deltaT;
+    let Tp = T - deltaT;
+    let Sf = C / Tf;
+    let Sp = C / Tp;
+    let TfSf = Tf * Sf;
+    let TpSp = Tp * Sp;
+
+    output.textContent = 
+`Future T (Tf) = ${Tf} s
+Future S (Sf) = ${Sf} J/s
+Check Tf x Sf ≈ C: ${TfSf} ≈ ${C}
+
+Past T (Tp) = ${Tp} s
+Past S (Sp) = ${Sp} J/s
+Check Tp x Sp ≈ C: ${TpSp} ≈ ${C}`;
+}
+</script>
+
+</body>
+</html>
